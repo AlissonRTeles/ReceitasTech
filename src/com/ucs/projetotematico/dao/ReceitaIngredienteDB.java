@@ -62,12 +62,9 @@ public class ReceitaIngredienteDB extends ModelDao<Receita> {
 	@Override
 	public void saveOrUpdate(Receita model) {
 		// TODO Auto-generated method stub
-
 	}
 
 	public static void main(String[] args) {
 		final ReceitaIngredienteDB t = new ReceitaIngredienteDB();
-		t.findAll().forEach(f -> System.out.println(f.toString()));
-
 	}
 }
