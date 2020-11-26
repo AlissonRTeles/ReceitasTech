@@ -32,6 +32,7 @@ public class ReceitaIngredienteDB extends ModelDao<Receita>{
 				e.printStackTrace();
 			}
 			receitas.add(receita);
+			
 		}
 		);
 
