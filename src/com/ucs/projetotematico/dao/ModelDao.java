@@ -12,6 +12,7 @@ import java.sql.Statement;
 import java.util.Map;
 import java.util.Properties;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
 import com.ucs.projetotematico.entity.ModelAbstract;
 
@@ -94,6 +95,56 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 	}
 
 	public void saveOrUpdate(Map<String, String> map) {
+		final String idString = map.get("id");
+		if (idString != null) {
+			final Integer id = Integer.valueOf(idString);
+			update(map, id);
+		} else {
+			save(map);
+		}
+
+	}
+
+	private void save(Map<String, String> map) {
+		String sql = "insert into " + getModel().getTableName();
+		map.remove("id");
+
+		sql = sql.concat(" ( ");
+		sql = sql.concat(map.keySet().stream().collect(Collectors.joining(",")));
+		sql = sql.concat(" ) ");
+
+		sql = sql.concat(" values ");
+
+		sql = sql.concat(" ( ");
+		sql = sql.concat(map.values().stream().collect(Collectors.joining("','", "'", "'")));
+		sql = sql.concat(" ) ");
+
+		try {
+
+			final PreparedStatement prepareStatement = conn.prepareStatement(sql);
+			prepareStatement.executeUpdate();
+		} catch (final SQLException se) {
+			System.out.println("Não foi possível conectar ao Banco de Dados");
+			se.printStackTrace();
+		}
+	}
+
+	private void findLike(Map<String, String> map) {
+		String sql = "select * from " + getModel().getTableName();
+
+		sql = sql.concat(" where ");
+
+		try {
+
+			final PreparedStatement prepareStatement = conn.prepareStatement(sql);
+			prepareStatement.executeUpdate();
+		} catch (final SQLException se) {
+			System.out.println("Não foi possível conectar ao Banco de Dados");
+			se.printStackTrace();
+		}
+	}
+
+	private void update(Map<String, String> map, Integer id) {
 
 	}
 

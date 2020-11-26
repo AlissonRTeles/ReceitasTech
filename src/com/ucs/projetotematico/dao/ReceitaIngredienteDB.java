@@ -2,7 +2,9 @@ package com.ucs.projetotematico.dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ucs.projetotematico.entity.Receita;
 
@@ -61,10 +63,33 @@ public class ReceitaIngredienteDB extends ModelDao<Receita> {
 
 	@Override
 	public void saveOrUpdate(Receita model) {
-		// TODO Auto-generated method stub
+		final Map<String, String> map = new HashMap<String, String>();
+
+		map.put("id", null);
+
+		if (model.getId() != null) {
+			map.put("id", model.getId().toString());
+		}
+
+		map.put("nome", model.getNome());
+		map.put("descricao", model.getDescricao());
+
+		super.saveOrUpdate(map);
+
+	}
+
+	@Override
+	public Receita findLike(Receita m) {
+		super.findLike(map);
+		return null;
 	}
 
 	public static void main(String[] args) {
 		final ReceitaIngredienteDB t = new ReceitaIngredienteDB();
+
+		final Receita receita = new Receita();
+		receita.setNome("alisson");
+		receita.setDescricao("descricao");
+
 	}
 }
