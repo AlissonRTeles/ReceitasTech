@@ -11,6 +11,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -82,16 +83,18 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 	}
 
 	@Override
-	public void remove(Integer id) {
+	public boolean remove(Integer id) {
 		try {
 			final String sql = "delete from " + getModel().getTableName() + " where id=?";
 			final PreparedStatement prepareStatement = conn.prepareStatement(sql);
 			prepareStatement.setInt(1, id);
-			prepareStatement.execute();
+			return prepareStatement.execute();
 		} catch (final SQLException se) {
 			System.out.println("Não foi possível conectar ao Banco de Dados");
 			se.printStackTrace();
 		}
+
+		return false;
 	}
 
 	public void saveOrUpdate(Map<String, String> map) {
@@ -129,15 +132,29 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 		}
 	}
 
-	private void findLike(Map<String, String> map) {
+	public void findLike(Map<String, String> map, Consumer<ResultSet> action) {
 		String sql = "select * from " + getModel().getTableName();
-
+		map.remove("id");
 		sql = sql.concat(" where ");
+		final Set<String> keySet = map.keySet();
+
+		for (final String k : map.keySet()) {
+			if (map.get(k) != null) {
+				sql = sql.concat(k + " like '%" + map.get(k) + "%' and");
+			}
+		}
+
+		sql = sql.concat(" id is not null");
 
 		try {
 
 			final PreparedStatement prepareStatement = conn.prepareStatement(sql);
-			prepareStatement.executeUpdate();
+			setRs(prepareStatement.executeQuery());
+
+			while (getRs().next()) {
+				action.accept(getRs());
+			}
+
 		} catch (final SQLException se) {
 			System.out.println("Não foi possível conectar ao Banco de Dados");
 			se.printStackTrace();

@@ -1,5 +1,6 @@
 package com.ucs.projetotematico.dao;
 
+import java.sql.ResultSet;
 import java.util.List;
 
 import com.ucs.projetotematico.entity.ModelAbstract;
@@ -9,9 +10,11 @@ public interface ModelDaoInterface<M extends ModelAbstract> {
 
 	public M findById(Integer id);
 
-	public M findLike(M m);
+	public List<M> findLike(M model);
 
-	public void remove(Integer id);
+	public boolean remove(Integer id);
 
 	public void saveOrUpdate(M model);
+
+	public M convertResultSet(ResultSet resultSet);
 }
