@@ -2,13 +2,17 @@ package com.ucs.projetotematico.dao;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
 
 import com.ucs.projetotematico.entity.ModelAbstract;
+import com.ucs.projetotematico.entity.Receita;
 
 public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInterface<M>{
 	private Connection conn;
@@ -35,7 +39,60 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 		
 		return conn;
 	}
+	
+	public void findAll(Consumer<ResultSet> action){
+		
+		try {
+			setStmt(conn.createStatement());
+			setRs(getStmt().executeQuery("select * from " + getModel().getTableName()));
 
+			while (getRs().next()) {
+							
+				action.accept(getRs());
+			}
+			
+		} catch (SQLException se) {
+			System.out.println("Não foi possível conectar ao Banco de Dados");
+			se.printStackTrace();
+		}
+
+	}
+	
+	public void findById(Consumer<ResultSet> action,Integer id) {
+		try {
+			String sql = "select * from " + getModel().getTableName()+" where id=?";
+			PreparedStatement prepareStatement = conn.prepareStatement(sql);
+			prepareStatement.setInt(1, id);
+			
+			setRs(prepareStatement.executeQuery());
+			
+			while (getRs().next()) {
+							
+				action.accept(getRs());
+			}
+			
+		} catch (SQLException se) {
+			System.out.println("Não foi possível conectar ao Banco de Dados");
+			se.printStackTrace();
+		}
+	}
+	
+	public void remove(Integer id) {
+		try {
+			String sql = "delete from " + getModel().getTableName()+" where id=?";
+			PreparedStatement prepareStatement = conn.prepareStatement(sql);
+			prepareStatement.setInt(1, id);
+			prepareStatement.execute();
+		} catch (SQLException se) {
+			System.out.println("Não foi possível conectar ao Banco de Dados");
+			se.printStackTrace();
+		}
+	}
+	
+	public void saveOrUpdate(Map<String, String> map) {
+		
+	}
+	
 	
 	public void closeConnection() {
 		try {

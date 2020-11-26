@@ -1,7 +1,7 @@
 package com.ucs.projetotematico.entity;
 
 public abstract class ModelAbstract implements ModelInterface{
-	public Integer id;
+	private Integer id;
 
 	public Integer getId() {
 		return id;

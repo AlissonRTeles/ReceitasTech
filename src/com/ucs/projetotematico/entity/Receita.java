@@ -1,73 +1,34 @@
 package com.ucs.projetotematico.entity;
 
 public class Receita extends ModelAbstract{
-	private String tableName;
-	private String nome_receita;
-	private int id_receita;
-	private String descricao_receita;
+	private static String tableName = "receita";
+	private String nome;
+	private String descricao;
 	
 	public Receita(){
 		
 	}
 
 	public Receita(String nome_receita, int id_receita, String descricao_receita) {
-		this.nome_receita = nome_receita;
-		this.id_receita = id_receita;
-		this.descricao_receita = descricao_receita;
+		super.setId(id_receita);
+		this.nome = nome_receita;
+		this.descricao = descricao_receita;
 	}
 	
 	public String getNome() {
-		return nome_receita;
+		return nome;
 	}
 
 	public void setNome(String nome) {
-		this.nome_receita = nome_receita;
+		this.nome = nome;
 	}
-	
-	public Integer getIdReceita() {
-		return id_receita;
-	}
-
-	public void setIdReceita(Integer id) {
-		this.id_receita = id_receita;
-	}
-	
+		
 	public String getDescricao() {
-		return descricao_receita;
+		return descricao;
 	}
 	
 	public void setDescricao(String descricao_receita) {
-		this.descricao_receita = descricao_receita;
-	}
-	
-//	@Override
-//	public int hashCode() {
-//		final int prime = 31;
-//		int result = 1;
-//		result = prime * result + ((id_receita == null) ? 0 : id_receita.hashCode());
-//		return result;
-//	}
-//
-//	@Override
-//	public boolean equals(Object obj) {
-//		if (this == obj)
-//			return true;
-//		if (obj == null)
-//			return false;
-//		if (getClass() != obj.getClass())
-//			return false;
-//		Receitas other = (Receitas) obj;
-//		if (id_receita == null) {
-//			if (other.id_receita != null)
-//				return false;
-//		} else if (!id_receita.equals(other.id_receita))
-//			return false;
-//		return true;
-//	}
-
-	@Override
-	public String toString() {
-		return "Ingrediente [id=" + id_receita + ", nome=" + nome_receita + "]";
+		this.descricao = descricao_receita;
 	}
 
 	@Override
@@ -81,4 +42,8 @@ public class Receita extends ModelAbstract{
 		
 	}
 
+	@Override
+	public String toString() {
+		return "Receita [nome=" + nome + ", descricao=" + descricao + "]";
+	}
 }
