@@ -1,55 +1,53 @@
 package com.ucs.projetotematico.dao;
 
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 import com.ucs.projetotematico.entity.Receita;
 
-public class ReceitaIngredienteDB extends ModelDao<Receita>{
+public class ReceitaIngredienteDB extends ModelDao<Receita> {
 
 	private ReceitaIngredienteDB() {
-		
+
 		super.setConn(super.openConnection());
 		super.setModel(new Receita());
 	}
 
 	@Override
 	public List<Receita> findAll() {
-		List<Receita> receitas = new ArrayList<Receita>();
+		final List<Receita> receitas = new ArrayList<Receita>();
 
-		super.findAll(rs->{
-			Receita receita = new Receita();
-			
+		super.findAll(rs -> {
+			final Receita receita = new Receita();
+
 			try {
-				
+
 				receita.setId(rs.getInt("id"));
 				receita.setDescricao(rs.getString("descricao"));
 				receita.setNome(rs.getString("nome"));
-				
-			} catch (SQLException e) {				
+
+			} catch (final SQLException e) {
 				e.printStackTrace();
 			}
 			receitas.add(receita);
-			
-		}
-		);
+
+		});
 
 		return receitas;
 	}
 
 	@Override
 	public Receita findById(Integer id) {
-		Receita receita = new Receita();
-		
-		super.findById(rs->{
+		final Receita receita = new Receita();
+
+		super.findById(rs -> {
 			try {
 				receita.setId(rs.getInt("id"));
 				receita.setNome(rs.getString("nome"));
 				receita.setDescricao(rs.getString("descricao"));
-				
-			} catch (SQLException e) {				
+
+			} catch (final SQLException e) {
 				e.printStackTrace();
 			}
 		}, id);
@@ -68,7 +66,8 @@ public class ReceitaIngredienteDB extends ModelDao<Receita>{
 	}
 
 	public static void main(String[] args) {
-		ReceitaIngredienteDB t = new ReceitaIngredienteDB();
-		
+		final ReceitaIngredienteDB t = new ReceitaIngredienteDB();
+		t.findAll().forEach(f -> System.out.println(f.toString()));
+
 	}
 }
