@@ -1,11 +1,30 @@
 package com.ucs.projetotematico.entity;
 
-public class Unidade {
+public class Unidade extends ModelAbstract{
+	private String tableName = "unidade";
+	private String tipo;
 	
-	private String tipo_unidade;
+	@Override
+	public String getTableName() {
+		return tableName;
+	}
 
-	public Unidade(String tipo_unidade) {
-		
+	@Override
+	public void setTableName(String tableName) {
+		this.tableName = tableName;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	@Override
+	public String toString() {
+		return "Unidade [tipo=" + tipo + ", getId()=" + getId() + "]";
 	}
 
 }

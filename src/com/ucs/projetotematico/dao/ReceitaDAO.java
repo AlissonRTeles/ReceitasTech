@@ -97,10 +97,9 @@ public class ReceitaDAO extends ModelDao<Receita> {
 			model.setDescricao(resultSet.getString("descricao"));
 			model.setNome(resultSet.getString("nome"));
 		} catch (final SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		return null;
+		return model;
 	}
 
 }
