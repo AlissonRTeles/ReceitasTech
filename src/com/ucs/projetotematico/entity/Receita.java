@@ -4,6 +4,7 @@ public class Receita extends ModelAbstract{
 	private static String tableName = "receita";
 	private String nome;
 	private String descricao;
+	private String modoPreparo;
 	
 	public Receita(){
 		
@@ -31,6 +32,14 @@ public class Receita extends ModelAbstract{
 		this.descricao = descricao_receita;
 	}
 
+	public String getModoPreparo() {
+		return modoPreparo;
+	}
+
+	public void setModoPreparo(String modoPreparo) {
+		this.modoPreparo = modoPreparo;
+	}
+
 	@Override
 	public String getTableName() {
 		return tableName;
@@ -44,6 +53,8 @@ public class Receita extends ModelAbstract{
 
 	@Override
 	public String toString() {
-		return "Receita [nome=" + nome + ", descricao=" + descricao + "]";
+		return "Receita [nome=" + nome + ", descricao=" + descricao
+				+ ", modoPreparo=" + modoPreparo + "]";
 	}
+
 }

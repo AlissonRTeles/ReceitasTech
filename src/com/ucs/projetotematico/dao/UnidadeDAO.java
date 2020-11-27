@@ -1,5 +1,6 @@
 package com.ucs.projetotematico.dao;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,8 +12,13 @@ import com.ucs.projetotematico.entity.Unidade;
 
 public class UnidadeDAO extends ModelDao<Unidade> {
 	
-	private UnidadeDAO() {
+	UnidadeDAO() {
 		super.setConn(super.openConnection());
+		super.setModel(new Unidade());
+	}
+	
+	UnidadeDAO(Connection conn){
+		super.setConn(conn);
 		super.setModel(new Unidade());
 	}
 

@@ -1,5 +1,6 @@
 package com.ucs.projetotematico.dao;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -12,11 +13,15 @@ import com.ucs.projetotematico.entity.Ingrediente;
 
 public class IngredienteDAO extends ModelDao<Ingrediente> {
 	
-	private IngredienteDAO() {
+	public IngredienteDAO() {
 		super.setConn(super.openConnection());
 		super.setModel(new Ingrediente());
 	}
-
+	
+	IngredienteDAO(Connection conn){
+		super.setConn(conn);
+		super.setModel(new Ingrediente());
+	}
 
 	@Override
 	public List<Ingrediente> findAll() {

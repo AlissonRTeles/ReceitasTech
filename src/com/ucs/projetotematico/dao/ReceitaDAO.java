@@ -1,5 +1,6 @@
 package com.ucs.projetotematico.dao;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,9 +12,14 @@ import com.ucs.projetotematico.entity.Receita;
 
 public class ReceitaDAO extends ModelDao<Receita> {
 
-	private ReceitaDAO() {
+	public ReceitaDAO() {
 
 		super.setConn(super.openConnection());
+		super.setModel(new Receita());
+	}
+	
+	ReceitaDAO(Connection conn){
+		super.setConn(conn);
 		super.setModel(new Receita());
 	}
 
@@ -40,6 +46,7 @@ public class ReceitaDAO extends ModelDao<Receita> {
 			model.setId(receita.getId());
 			model.setDescricao(receita.getDescricao());
 			model.setNome(receita.getNome());
+			model.setModoPreparo(receita.getModoPreparo());
 
 		}, id);
 		return model;
@@ -62,6 +69,7 @@ public class ReceitaDAO extends ModelDao<Receita> {
 
 		map.put("nome", model.getNome());
 		map.put("descricao", model.getDescricao());
+		map.put("modopreparo", model.getModoPreparo());
 
 		super.saveOrUpdate(map);
 
@@ -80,6 +88,7 @@ public class ReceitaDAO extends ModelDao<Receita> {
 
 		map.put("nome", model.getNome());
 		map.put("descricao", model.getDescricao());
+		map.put("modopreparo", model.getModoPreparo());
 
 		super.findLike(map, rs -> {
 			final Receita receita = convertResultSet(rs);
@@ -96,10 +105,12 @@ public class ReceitaDAO extends ModelDao<Receita> {
 			model.setId(resultSet.getInt("id"));
 			model.setDescricao(resultSet.getString("descricao"));
 			model.setNome(resultSet.getString("nome"));
+			model.setModoPreparo(resultSet.getString("modopreparo"));
+			
 		} catch (final SQLException e) {
 			e.printStackTrace();
 		}
 		return model;
 	}
-
+	
 }
