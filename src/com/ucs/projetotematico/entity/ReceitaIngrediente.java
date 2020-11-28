@@ -1,13 +1,13 @@
 package com.ucs.projetotematico.entity;
 
-public class ReceitaIngrediente extends ModelAbstract{
-	private String tableName="receitaingrediente";
+public class ReceitaIngrediente extends ModelAbstract {
+	private String tableName = "receitaingrediente";
 	private Integer quantidade;
 	private Unidade unidade;
 	private Receita receita;
+	private Integer idReceita;
 	private Ingrediente ingrediente;
-	
-	
+
 	public Integer getQuantidade() {
 		return quantidade;
 	}
@@ -48,14 +48,20 @@ public class ReceitaIngrediente extends ModelAbstract{
 	@Override
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
-		
+
+	}
+
+	public Integer getIdReceita() {
+		return idReceita;
+	}
+
+	public void setIdReceita(Integer idReceita) {
+		this.idReceita = idReceita;
 	}
 
 	@Override
 	public String toString() {
-		return "ReceitaIngrediente [quantidade=" + quantidade + ", unidade="
-				+ unidade.toString() + ", receita=" + receita.toString() + ", ingrediente="
-				+ ingrediente.toString() + "]";
+		return "ReceitaIngrediente [quantidade=" + quantidade + ", unidade=" + unidade.toString() + ", receita=" + receita.toString() + ", ingrediente=" + ingrediente.toString() + "]";
 	}
-	
+
 }

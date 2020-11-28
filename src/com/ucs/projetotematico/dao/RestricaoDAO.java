@@ -1,5 +1,6 @@
 package com.ucs.projetotematico.dao;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -9,14 +10,17 @@ import java.util.Map;
 
 import com.ucs.projetotematico.entity.Restricao;
 
-
 public class RestricaoDAO extends ModelDao<Restricao> {
-	
-	private RestricaoDAO() {
+
+	RestricaoDAO() {
 		super.setConn(super.openConnection());
 		super.setModel(new Restricao());
 	}
 
+	RestricaoDAO(Connection conn) {
+		super.setConn(conn);
+		super.setModel(new Restricao());
+	}
 
 	@Override
 	public List<Restricao> findAll() {
@@ -98,10 +102,10 @@ public class RestricaoDAO extends ModelDao<Restricao> {
 		}
 		return model;
 	}
-	
+
 	public static void main(String[] args) {
-		RestricaoDAO u = new RestricaoDAO();
-		
-		u.findAll().forEach(l-> System.out.println(l.toString()));
+		final RestricaoDAO u = new RestricaoDAO();
+
+		u.findAll().forEach(l -> System.out.println(l.toString()));
 	}
 }

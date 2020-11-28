@@ -25,6 +25,9 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 	private M model;
 
 	public Connection openConnection() {
+
+		Connection connection = null;
+
 		final Properties prop = loadFile();
 
 		final String driver = prop.getProperty("driver");
@@ -35,14 +38,14 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 		try {
 
 			Class.forName(driver);
-			this.conn = DriverManager.getConnection(url, user, pwd);
+			connection = DriverManager.getConnection(url, user, pwd);
 		} catch (final ClassNotFoundException cnfe) {
 			System.out.println("Driver JDBC não encontrado");
 		} catch (final SQLException se) {
 			System.out.println("Falha na conexão " + se.getMessage());
 		}
 
-		return conn;
+		return connection;
 	}
 
 	public void findAll(Consumer<ResultSet> action) {
@@ -134,13 +137,72 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 
 	public void findLike(Map<String, String> map, Consumer<ResultSet> action) {
 		String sql = "select * from " + getModel().getTableName();
+
 		map.remove("id");
+
 		sql = sql.concat(" where ");
 		final Set<String> keySet = map.keySet();
 
 		for (final String k : map.keySet()) {
 			if (map.get(k) != null) {
 				sql = sql.concat(k + " like '%" + map.get(k) + "%' and");
+			}
+		}
+
+		sql = sql.concat(" id is not null");
+
+		try {
+
+			final PreparedStatement prepareStatement = conn.prepareStatement(sql);
+			setRs(prepareStatement.executeQuery());
+
+			while (getRs().next()) {
+				action.accept(getRs());
+			}
+
+		} catch (final SQLException se) {
+			System.out.println("Não foi possível conectar ao Banco de Dados");
+			se.printStackTrace();
+		}
+	}
+
+	public void findByInt(Map<String, Integer> map, Consumer<ResultSet> action) {
+		String sql = "select * from " + getModel().getTableName();
+		sql = sql.concat(" where ");
+		final Set<String> keySet = map.keySet();
+
+		for (final String k : map.keySet()) {
+			if (map.get(k) != null) {
+				sql = sql.concat(k + "=" + map.get(k) + " and");
+			}
+		}
+
+		sql = sql.concat(" id is not null");
+
+		try {
+
+			final PreparedStatement prepareStatement = conn.prepareStatement(sql);
+			setRs(prepareStatement.executeQuery());
+
+			while (getRs().next()) {
+				action.accept(getRs());
+			}
+
+		} catch (final SQLException se) {
+			System.out.println("Não foi possível conectar ao Banco de Dados");
+			se.printStackTrace();
+		}
+	}
+
+	public void findByString(Map<String, String> map, Consumer<ResultSet> action) {
+		String sql = "select * from " + getModel().getTableName();
+		sql = sql.concat(" where ");
+
+		final Set<String> keySet = map.keySet();
+
+		for (final String k : map.keySet()) {
+			if (map.get(k) != null) {
+				sql = sql.concat(k + "='" + map.get(k) + "' and ");
 			}
 		}
 

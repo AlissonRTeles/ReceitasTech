@@ -1,13 +1,16 @@
 package com.ucs.projetotematico.entity;
 
-public class Receita extends ModelAbstract{
+import java.util.List;
+
+public class Receita extends ModelAbstract {
 	private static String tableName = "receita";
 	private String nome;
 	private String descricao;
 	private String modoPreparo;
-	
-	public Receita(){
-		
+	private List<ReceitaIngrediente> receitaIngredientes;
+
+	public Receita() {
+
 	}
 
 	public Receita(String nome_receita, int id_receita, String descricao_receita) {
@@ -15,7 +18,7 @@ public class Receita extends ModelAbstract{
 		this.nome = nome_receita;
 		this.descricao = descricao_receita;
 	}
-	
+
 	public String getNome() {
 		return nome;
 	}
@@ -23,11 +26,11 @@ public class Receita extends ModelAbstract{
 	public void setNome(String nome) {
 		this.nome = nome;
 	}
-		
+
 	public String getDescricao() {
 		return descricao;
 	}
-	
+
 	public void setDescricao(String descricao_receita) {
 		this.descricao = descricao_receita;
 	}
@@ -40,6 +43,14 @@ public class Receita extends ModelAbstract{
 		this.modoPreparo = modoPreparo;
 	}
 
+	public List<ReceitaIngrediente> getReceitaIngredientes() {
+		return receitaIngredientes;
+	}
+
+	public void setReceitaIngredientes(List<ReceitaIngrediente> receitaIngredientes) {
+		this.receitaIngredientes = receitaIngredientes;
+	}
+
 	@Override
 	public String getTableName() {
 		return tableName;
@@ -48,13 +59,12 @@ public class Receita extends ModelAbstract{
 	@Override
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
-		
+
 	}
 
 	@Override
 	public String toString() {
-		return "Receita [nome=" + nome + ", descricao=" + descricao
-				+ ", modoPreparo=" + modoPreparo + "]";
+		return "Receita [nome=" + nome + ", descricao=" + descricao + ", modoPreparo=" + modoPreparo + "]";
 	}
 
 }

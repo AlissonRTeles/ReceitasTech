@@ -9,16 +9,19 @@ import java.util.List;
 import java.util.Map;
 
 import com.ucs.projetotematico.entity.Receita;
+import com.ucs.projetotematico.entity.ReceitaIngrediente;
 
 public class ReceitaDAO extends ModelDao<Receita> {
+	private ReceitaIngredienteDAO receitaIngredienteDAO;
 
 	public ReceitaDAO() {
 
 		super.setConn(super.openConnection());
 		super.setModel(new Receita());
+		this.receitaIngredienteDAO = new ReceitaIngredienteDAO(super.openConnection());
 	}
-	
-	ReceitaDAO(Connection conn){
+
+	public ReceitaDAO(Connection conn) {
 		super.setConn(conn);
 		super.setModel(new Receita());
 	}
@@ -101,16 +104,41 @@ public class ReceitaDAO extends ModelDao<Receita> {
 	@Override
 	public Receita convertResultSet(ResultSet resultSet) {
 		final Receita model = new Receita();
+
 		try {
 			model.setId(resultSet.getInt("id"));
 			model.setDescricao(resultSet.getString("descricao"));
 			model.setNome(resultSet.getString("nome"));
 			model.setModoPreparo(resultSet.getString("modopreparo"));
-			
+
+			final Map<String, Integer> map = new HashMap<String, Integer>();
+			map.put("id_receita", model.getId());
+
+			model.setReceitaIngredientes(new ArrayList<ReceitaIngrediente>());
+
+			if (getReceitaIngredienteDAO() != null) {
+				getReceitaIngredienteDAO().findByInt(map, rs -> {
+					model.getReceitaIngredientes().add(getReceitaIngredienteDAO().convertResultSet(rs));
+				});
+			}
+
 		} catch (final SQLException e) {
 			e.printStackTrace();
 		}
 		return model;
 	}
-	
+
+	public ReceitaIngredienteDAO getReceitaIngredienteDAO() {
+		return receitaIngredienteDAO;
+	}
+
+	public void setReceitaIngredienteDAO(ReceitaIngredienteDAO receitaIngredienteDAO) {
+		this.receitaIngredienteDAO = receitaIngredienteDAO;
+	}
+
+	public static void main(String[] args) {
+		final ReceitaDAO r = new ReceitaDAO();
+
+		System.out.println(r.findById(1).toString());
+	}
 }
