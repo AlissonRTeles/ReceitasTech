@@ -50,6 +50,7 @@ public class ReceitaDAO extends ModelDao<Receita> {
 			model.setDescricao(receita.getDescricao());
 			model.setNome(receita.getNome());
 			model.setModoPreparo(receita.getModoPreparo());
+			model.setReceitaIngredientes(receita.getReceitaIngredientes());
 
 		}, id);
 		return model;
@@ -120,6 +121,7 @@ public class ReceitaDAO extends ModelDao<Receita> {
 				getReceitaIngredienteDAO().findByInt(map, rs -> {
 					model.getReceitaIngredientes().add(getReceitaIngredienteDAO().convertResultSet(rs));
 				});
+
 			}
 
 		} catch (final SQLException e) {
@@ -140,5 +142,14 @@ public class ReceitaDAO extends ModelDao<Receita> {
 		final ReceitaDAO r = new ReceitaDAO();
 
 		System.out.println(r.findById(1).toString());
+	}
+
+	@Override
+	public void closeConnection() {
+		super.closeConnection();
+
+		if (getReceitaIngredienteDAO() != null) {
+			getReceitaIngredienteDAO().closeConnection();
+		}
 	}
 }

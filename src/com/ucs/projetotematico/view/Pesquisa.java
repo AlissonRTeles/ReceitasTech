@@ -22,6 +22,7 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import com.ucs.projetotematico.entity.Receita;
 import com.ucs.projetotematico.entity.ReceitaIngrediente;
 
 public class Pesquisa extends JFrame implements ActionListener {
@@ -41,10 +42,10 @@ public class Pesquisa extends JFrame implements ActionListener {
 
 		columns.add("Receitas");
 
-		final List<String> carregaResultado = carregaResultado();
+		final List<Receita> carregaResultado = carregaResultado();
 
 		carregaResultado.forEach(e -> {
-			values.add(new String[] { e });
+			values.add(new String[] { e.getNome() });
 		});
 
 		final TableModel tableModel = new DefaultTableModel(values.toArray(new Object[][] {}), columns.toArray());
@@ -64,7 +65,7 @@ public class Pesquisa extends JFrame implements ActionListener {
 				final int row = table.rowAtPoint(point);
 				if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
 
-					new Receita(lista, table.getSelectedRow());
+					final ReceitaView receitaView = new ReceitaView(carregaResultado, table.getSelectedRow());
 				}
 			}
 		});
@@ -94,8 +95,9 @@ public class Pesquisa extends JFrame implements ActionListener {
 
 	}
 
-	public List<String> carregaResultado() {
-		return lista.stream().map(p -> p.getReceita().getNome()).distinct().collect(Collectors.toList());
+	public List<Receita> carregaResultado() {
+		final List<Receita> collect = lista.stream().map(p -> p.getReceita()).distinct().collect(Collectors.toList());
+		return collect;
 	}
 
 	public Pesquisa() {
