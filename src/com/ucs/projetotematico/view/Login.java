@@ -9,6 +9,7 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
@@ -91,7 +92,7 @@ public class Login extends JFrame implements ActionListener {
 
 		final Usuario find = getUsuarioDAO().find(model);
 		if (find.getId() == null) {
-			System.out.println("usuario não existe!");
+			JOptionPane.showMessageDialog(this, "usuário não cadastrado!");
 		} else {
 			getUsuarioDAO().closeConnection();
 

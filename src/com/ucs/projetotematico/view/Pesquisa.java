@@ -3,8 +3,11 @@ package com.ucs.projetotematico.view;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
 import java.awt.GridLayout;
+import java.awt.Point;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -14,8 +17,10 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.JTable;
 import javax.swing.JTextField;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
 
 import com.ucs.projetotematico.entity.ReceitaIngrediente;
 
@@ -24,14 +29,45 @@ public class Pesquisa extends JFrame implements ActionListener {
 
 	private JButton bVolta;
 	private JPanel fundo, botoes, campos;
-	private JTextArea textArea;
+
+	List<String> columns = new ArrayList<String>();
+	List<String[]> values = new ArrayList<String[]>();
 
 	private JTextField tIngredientes;
 
+	private JTable table;
+
 	private void init() {
 
-		textArea = new JTextArea(carregaResultado());
+		columns.add("Receitas");
 
+		final List<String> carregaResultado = carregaResultado();
+
+		carregaResultado.forEach(e -> {
+			values.add(new String[] { e });
+		});
+
+		final TableModel tableModel = new DefaultTableModel(values.toArray(new Object[][] {}), columns.toArray());
+
+		table = new JTable(tableModel) {
+			@Override
+			public boolean editCellAt(int row, int column, java.util.EventObject e) {
+				return false;
+			}
+		};
+
+		table.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent mouseEvent) {
+				final JTable table = (JTable) mouseEvent.getSource();
+				final Point point = mouseEvent.getPoint();
+				final int row = table.rowAtPoint(point);
+				if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
+
+					new Receita(lista, table.getSelectedRow());
+				}
+			}
+		});
 		this.setTitle("Resultado da pesquisa");
 		this.setSize(500, 200);
 
@@ -47,7 +83,7 @@ public class Pesquisa extends JFrame implements ActionListener {
 		botoes.add(bVolta);
 
 		fundo.add(campos, BorderLayout.NORTH);
-		fundo.add(new JScrollPane(textArea), BorderLayout.CENTER);
+		fundo.add(new JScrollPane(table), BorderLayout.CENTER);
 		fundo.add(botoes, BorderLayout.SOUTH);
 
 		this.getContentPane().add(fundo);
@@ -58,8 +94,8 @@ public class Pesquisa extends JFrame implements ActionListener {
 
 	}
 
-	public String carregaResultado() {
-		return lista.stream().map(p -> p.getReceita().getNome()).distinct().collect(Collectors.joining("\n"));
+	public List<String> carregaResultado() {
+		return lista.stream().map(p -> p.getReceita().getNome()).distinct().collect(Collectors.toList());
 	}
 
 	public Pesquisa() {
