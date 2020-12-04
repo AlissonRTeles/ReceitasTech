@@ -10,7 +10,7 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
-public class Inicial extends JFrame implements ActionListener {
+public class InicialView extends JFrame implements ActionListener {
 
 	private JButton bLoga, bCadastra;
 	private JPanel fundo, botoes, campos;
@@ -42,26 +42,26 @@ public class Inicial extends JFrame implements ActionListener {
 
 	}
 
-	public Inicial() {
+	public InicialView() {
 		this.init();
 	}
 
 	public static void main(String[] args) {
 
-		final Inicial pg1 = new Inicial();
+		final InicialView pg1 = new InicialView();
 		// pg1.init();
 
 	}
 
 	private void acaoLogar() {
 
-		new Login().setVisible(true);
+		new LoginVIew().setVisible(true);
 		this.dispose();
 	}
 
 	private void acaoCadastrar() {
 
-		new Cadastro().setVisible(true);
+		new CadastroView().setVisible(true);
 		this.dispose();
 	}
 

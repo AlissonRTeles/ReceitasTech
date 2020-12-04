@@ -41,7 +41,10 @@ public class ReceitaView extends JFrame implements ActionListener {
 		fundo = new JPanel(new BorderLayout());
 		botoes = new JPanel(new FlowLayout());
 		jTAModoPreparo = new JTextArea(receita.getModoPreparo(), 50, 10);
+		jTAModoPreparo.setEditable(false);
+
 		jTAIgredientes = new JTextArea(getIngredientes(receita.getReceitaIngredientes()));
+		jTAIgredientes.setEditable(false);
 
 		campos.add(new JLabel("Receita:"));
 		campos.add(new JLabel(receita.getDescricao()));
@@ -102,7 +105,7 @@ public class ReceitaView extends JFrame implements ActionListener {
 
 	private void acaoVoltar() {
 
-		new Navega().setVisible(true);
+		new NavegaView().setVisible(true);
 		this.dispose();
 	}
 

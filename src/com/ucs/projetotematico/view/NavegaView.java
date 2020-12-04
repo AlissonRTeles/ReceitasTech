@@ -20,7 +20,7 @@ import com.ucs.projetotematico.dao.ReceitaIngredienteDAO;
 import com.ucs.projetotematico.entity.Ingrediente;
 import com.ucs.projetotematico.entity.ReceitaIngrediente;
 
-public class Navega extends JFrame implements ActionListener {
+public class NavegaView extends JFrame implements ActionListener {
 
 	private IngredienteDAO ingredienteDAO;
 	private ReceitaIngredienteDAO receitaIngredienteDAO;
@@ -65,13 +65,13 @@ public class Navega extends JFrame implements ActionListener {
 
 	}
 
-	public Navega() {
+	public NavegaView() {
 		this.init();
 	}
 
 	public static void main(String[] args) {
 
-		final Navega pg4 = new Navega();
+		final NavegaView pg4 = new NavegaView();
 		// pg4.init();
 
 	}
@@ -107,7 +107,7 @@ public class Navega extends JFrame implements ActionListener {
 		ingredienteDAO.closeConnection();
 		receitaIngredienteDAO.closeConnection();
 
-		new Pesquisa(listaRI);
+		new PesquisaView(listaRI);
 		this.dispose();
 	}
 

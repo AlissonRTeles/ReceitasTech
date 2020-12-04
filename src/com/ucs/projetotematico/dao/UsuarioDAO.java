@@ -1,6 +1,7 @@
 package com.ucs.projetotematico.dao;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -61,18 +62,31 @@ public class UsuarioDAO extends ModelDao<Usuario> {
 
 	@Override
 	public void saveOrUpdate(Usuario model) {
-		final Map<String, String> map = new HashMap<String, String>();
 
-		map.put("id", null);
+		String sql = "insert into " + getModel().getTableName();
 
-		if (model.getId() != null) {
-			map.put("id", model.getId().toString());
+		sql = sql.concat(" ( ");
+		sql = sql.concat(" nome,senha,id_restricao");
+		sql = sql.concat(" ) ");
+
+		sql = sql.concat(" values ");
+
+		sql = sql.concat(" ( ");
+		sql = sql.concat("?,?,?");
+		sql = sql.concat(" ) ");
+
+		try {
+
+			final PreparedStatement prepareStatement = super.getConn().prepareStatement(sql);
+			prepareStatement.setString(1, model.getNome());
+			prepareStatement.setString(2, model.getSenha());
+			prepareStatement.setInt(3, model.getRestricao().getId());
+
+			prepareStatement.executeUpdate();
+		} catch (final SQLException se) {
+			System.out.println("Não foi possível conectar ao Banco de Dados");
+			se.printStackTrace();
 		}
-
-		map.put("nome", model.getNome());
-		map.put("senha", model.getSenha());
-
-		super.saveOrUpdate(map);
 
 	}
 

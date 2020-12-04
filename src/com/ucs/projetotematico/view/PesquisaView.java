@@ -25,7 +25,7 @@ import javax.swing.table.TableModel;
 import com.ucs.projetotematico.entity.Receita;
 import com.ucs.projetotematico.entity.ReceitaIngrediente;
 
-public class Pesquisa extends JFrame implements ActionListener {
+public class PesquisaView extends JFrame implements ActionListener {
 	List<ReceitaIngrediente> lista;
 
 	private JButton bVolta;
@@ -100,26 +100,26 @@ public class Pesquisa extends JFrame implements ActionListener {
 		return collect;
 	}
 
-	public Pesquisa() {
+	public PesquisaView() {
 		this.init();
 		this.lista = new ArrayList<ReceitaIngrediente>();
 	}
 
-	public Pesquisa(List<ReceitaIngrediente> lista) {
+	public PesquisaView(List<ReceitaIngrediente> lista) {
 		this.lista = lista;
 		this.init();
 	}
 
 	public static void main(String[] args) {
 
-		final Pesquisa pg5 = new Pesquisa();
+		final PesquisaView pg5 = new PesquisaView();
 		// pg5.init();
 
 	}
 
 	private void acaoVoltar() {
 
-		new Navega().setVisible(true);
+		new NavegaView().setVisible(true);
 		this.dispose();
 	}
 

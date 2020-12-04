@@ -16,7 +16,7 @@ import javax.swing.JTextField;
 import com.ucs.projetotematico.dao.UsuarioDAO;
 import com.ucs.projetotematico.entity.Usuario;
 
-public class Login extends JFrame implements ActionListener {
+public class LoginVIew extends JFrame implements ActionListener {
 
 	private UsuarioDAO usuarioDAO;
 
@@ -65,12 +65,12 @@ public class Login extends JFrame implements ActionListener {
 
 	}
 
-	public Login() {
+	public LoginVIew() {
 		this.init();
 	}
 
 	public static void main(String[] args) {
-		final Login pg2 = new Login();
+		final LoginVIew pg2 = new LoginVIew();
 		// pg2.init();
 	}
 
@@ -81,7 +81,7 @@ public class Login extends JFrame implements ActionListener {
 
 	private void acaoVoltar() {
 
-		new Inicial().setVisible(true);
+		new InicialView().setVisible(true);
 		this.dispose();
 	}
 
@@ -96,7 +96,7 @@ public class Login extends JFrame implements ActionListener {
 		} else {
 			getUsuarioDAO().closeConnection();
 
-			new Navega().setVisible(true);
+			new NavegaView().setVisible(true);
 			this.dispose();
 		}
 
