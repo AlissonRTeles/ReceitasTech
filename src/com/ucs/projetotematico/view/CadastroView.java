@@ -105,15 +105,20 @@ public class CadastroView extends JFrame implements ActionListener {
 		this.usuario.setSenha(tSenha.getText());
 		this.usuario.setRestricao(restricao);
 
-		final UsuarioDAO dao = new UsuarioDAO();
+		if (validaSenha(usuario.getSenha(), tConfirma.getText())) {
+			final UsuarioDAO dao = new UsuarioDAO();
 
-		dao.saveOrUpdate(usuario);
+			dao.saveOrUpdate(usuario);
 
-		JOptionPane.showMessageDialog(this, "usuário cadastrado com sucesso!");
-		dao.closeConnection();
+			JOptionPane.showMessageDialog(this, "usuário cadastrado com sucesso!");
+			dao.closeConnection();
 
-		new NavegaView().setVisible(true);
-		this.dispose();
+			new NavegaView().setVisible(true);
+			this.dispose();
+
+		} else {
+			JOptionPane.showMessageDialog(this, "a senha deve ser confirmada!");
+		}
 	}
 
 	@Override
@@ -126,6 +131,10 @@ public class CadastroView extends JFrame implements ActionListener {
 			this.acaoLimpar();
 		}
 
+	}
+
+	public boolean validaSenha(final String senha, final String confirmaSenha) {
+		return senha.equals(confirmaSenha);
 	}
 
 	public Usuario getUsuario() {
