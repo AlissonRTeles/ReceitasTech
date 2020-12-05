@@ -66,13 +66,24 @@ public class UsuarioDAO extends ModelDao<Usuario> {
 		String sql = "insert into " + getModel().getTableName();
 
 		sql = sql.concat(" ( ");
-		sql = sql.concat(" nome,senha,id_restricao");
+		if(model.getRestricao()!=null) {
+			sql = sql.concat(" nome,senha,id_restricao");
+		}else {
+			sql = sql.concat(" nome,senha");
+		}
+		
 		sql = sql.concat(" ) ");
 
 		sql = sql.concat(" values ");
 
 		sql = sql.concat(" ( ");
-		sql = sql.concat("?,?,?");
+		
+		if(model.getRestricao()!=null) {
+			sql = sql.concat("?,?,?");
+		}else{
+				sql = sql.concat("?,?");
+		}
+		
 		sql = sql.concat(" ) ");
 
 		try {
@@ -80,7 +91,9 @@ public class UsuarioDAO extends ModelDao<Usuario> {
 			final PreparedStatement prepareStatement = super.getConn().prepareStatement(sql);
 			prepareStatement.setString(1, model.getNome());
 			prepareStatement.setString(2, model.getSenha());
-			prepareStatement.setInt(3, model.getRestricao().getId());
+			if(model.getRestricao()!=null) {
+				prepareStatement.setInt(3, model.getRestricao().getId());
+			}
 
 			prepareStatement.executeUpdate();
 		} catch (final SQLException se) {

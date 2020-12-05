@@ -5,8 +5,11 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.ItemEvent;
+import java.awt.event.ItemListener;
 
 import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
@@ -22,7 +25,8 @@ public class CadastroView extends JFrame implements ActionListener {
 	private JButton bCadastra, bVolta, bLimpa;
 	private JPanel fundo, botoes, campos;
 
-	private JTextField tUsuario, tSenha, tConfirma, tRestricao;
+	private JTextField tUsuario, tSenha, tConfirma;
+	private JCheckBox checRestricao;
 
 	private Usuario usuario;
 
@@ -34,7 +38,7 @@ public class CadastroView extends JFrame implements ActionListener {
 		tUsuario = new JTextField("");
 		tSenha = new JTextField("");
 		tConfirma = new JTextField("");
-		tRestricao = new JTextField("");
+		checRestricao = new JCheckBox("Restrição");
 
 		bCadastra = new JButton("Cadastrar");
 		bCadastra.addActionListener(this);
@@ -53,8 +57,7 @@ public class CadastroView extends JFrame implements ActionListener {
 		campos.add(tSenha);
 		campos.add(new JLabel("Confirmar senha:"));
 		campos.add(tConfirma);
-		campos.add(new JLabel("Restri��o:"));
-		campos.add(tRestricao);
+		campos.add(checRestricao);
 
 		botoes.add(bCadastra);
 		botoes.add(bVolta);
@@ -68,6 +71,7 @@ public class CadastroView extends JFrame implements ActionListener {
 		this.setLocationRelativeTo(null);
 
 		this.setVisible(true);
+		
 
 	}
 
@@ -88,7 +92,8 @@ public class CadastroView extends JFrame implements ActionListener {
 		tUsuario.setText("");
 		tSenha.setText("");
 		tConfirma.setText("");
-		tRestricao.setText("");
+		checRestricao.setSelected(false);
+		
 	}
 
 	private void acaoVoltar() {
@@ -103,9 +108,12 @@ public class CadastroView extends JFrame implements ActionListener {
 
 		this.usuario.setNome(tUsuario.getText());
 		this.usuario.setSenha(tSenha.getText());
-		this.usuario.setRestricao(restricao);
 
-		if (validaSenha(usuario.getSenha(), tConfirma.getText())) {
+		if(checRestricao.isSelected()) {
+			this.usuario.setRestricao(restricao);
+		}
+
+		if (validaSenha(usuario.getSenha().trim(), tConfirma.getText().trim())) {
 			final UsuarioDAO dao = new UsuarioDAO();
 
 			dao.saveOrUpdate(usuario);
