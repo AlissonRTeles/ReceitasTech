@@ -19,11 +19,13 @@ import com.ucs.projetotematico.dao.ReceitaDAO;
 import com.ucs.projetotematico.dao.ReceitaIngredienteDAO;
 import com.ucs.projetotematico.entity.Ingrediente;
 import com.ucs.projetotematico.entity.ReceitaIngrediente;
+import com.ucs.projetotematico.entity.Usuario;
 
 public class NavegaView extends JFrame implements ActionListener {
 
 	private IngredienteDAO ingredienteDAO;
 	private ReceitaIngredienteDAO receitaIngredienteDAO;
+	private final Usuario usuario;
 
 	private JButton bPesquisa, bLimpa;
 	private JPanel fundo, botoes, campos;
@@ -65,13 +67,14 @@ public class NavegaView extends JFrame implements ActionListener {
 
 	}
 
-	public NavegaView() {
+	public NavegaView(Usuario usuario) {
+		this.usuario = usuario;
 		this.init();
 	}
 
 	public static void main(String[] args) {
 
-		final NavegaView pg4 = new NavegaView();
+		final NavegaView pg4 = new NavegaView(new Usuario());
 		// pg4.init();
 
 	}
@@ -107,7 +110,7 @@ public class NavegaView extends JFrame implements ActionListener {
 		ingredienteDAO.closeConnection();
 		receitaIngredienteDAO.closeConnection();
 
-		new PesquisaView(listaRI);
+		new PesquisaView(listaRI, usuario);
 		this.dispose();
 	}
 

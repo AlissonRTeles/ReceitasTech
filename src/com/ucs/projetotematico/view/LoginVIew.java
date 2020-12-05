@@ -91,12 +91,16 @@ public class LoginVIew extends JFrame implements ActionListener {
 		model.setSenha(tSenha.getText());
 
 		final Usuario find = getUsuarioDAO().find(model);
+		if (find.getRestricao().getId() == null) {
+			find.getRestricao().setId(-999);
+		}
+
 		if (find.getId() == null) {
 			JOptionPane.showMessageDialog(this, "usuário não cadastrado!");
 		} else {
 			getUsuarioDAO().closeConnection();
 
-			new NavegaView().setVisible(true);
+			new NavegaView(find).setVisible(true);
 			this.dispose();
 		}
 

@@ -22,11 +22,16 @@ import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 
+import com.ucs.projetotematico.dao.ReceitaDAO;
+import com.ucs.projetotematico.dao.RestricaoIngredienteDAO;
 import com.ucs.projetotematico.entity.Receita;
 import com.ucs.projetotematico.entity.ReceitaIngrediente;
+import com.ucs.projetotematico.entity.RestricaoIngrediente;
+import com.ucs.projetotematico.entity.Usuario;
 
 public class PesquisaView extends JFrame implements ActionListener {
-	List<ReceitaIngrediente> lista;
+	private final List<ReceitaIngrediente> lista;
+	private Usuario usuario;
 
 	private JButton bVolta;
 	private JPanel fundo, botoes, campos;
@@ -65,7 +70,7 @@ public class PesquisaView extends JFrame implements ActionListener {
 				final int row = table.rowAtPoint(point);
 				if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
 
-					final ReceitaView receitaView = new ReceitaView(carregaResultado, table.getSelectedRow());
+					final ReceitaView receitaView = new ReceitaView(carregaResultado, table.getSelectedRow(), usuario);
 				}
 			}
 		});
@@ -96,7 +101,36 @@ public class PesquisaView extends JFrame implements ActionListener {
 	}
 
 	public List<Receita> carregaResultado() {
-		final List<Receita> collect = lista.stream().map(p -> p.getReceita()).distinct().collect(Collectors.toList());
+		final RestricaoIngredienteDAO restricaoIngredienteDAO = new RestricaoIngredienteDAO();
+		final RestricaoIngrediente filter = new RestricaoIngrediente();
+		filter.setIdRestricao(usuario.getRestricao().getId());
+
+		final List<RestricaoIngrediente> findLike = restricaoIngredienteDAO.findLike(filter);
+
+		final List<Integer> idReceitas = lista.stream().map(p -> p.getReceita().getId()).distinct().collect(Collectors.toList());
+		final List<Receita> collect = new ArrayList<Receita>();
+
+		final ReceitaDAO receitaDAO = new ReceitaDAO();
+
+		// for (final Integer i : idReceitas) {
+		// collect.add(receitaDAO.findById(i));
+		// }
+
+		receitaDAO.closeConnection();
+
+		// collect = collect.stream().filter((f) -> {
+		//
+		// if (f.getReceitaIngredientes().stream().anyMatch(a ->
+		// findLike.stream().anyMatch(aM ->
+		// aM.getIdIngrediente().equals(a.getIngrediente().getId())))) {
+		// return false;
+		// }
+		//
+		// return true;
+		// }).collect(Collectors.toList());
+
+		restricaoIngredienteDAO.closeConnection();
+
 		return collect;
 	}
 
@@ -105,8 +139,9 @@ public class PesquisaView extends JFrame implements ActionListener {
 		this.lista = new ArrayList<ReceitaIngrediente>();
 	}
 
-	public PesquisaView(List<ReceitaIngrediente> lista) {
+	public PesquisaView(List<ReceitaIngrediente> lista, Usuario usuario) {
 		this.lista = lista;
+		this.usuario = usuario;
 		this.init();
 	}
 
@@ -119,7 +154,7 @@ public class PesquisaView extends JFrame implements ActionListener {
 
 	private void acaoVoltar() {
 
-		new NavegaView().setVisible(true);
+		new NavegaView(usuario).setVisible(true);
 		this.dispose();
 	}
 

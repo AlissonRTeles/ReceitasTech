@@ -15,17 +15,18 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
-import com.ucs.projetotematico.dao.ReceitaDAO;
 import com.ucs.projetotematico.entity.Receita;
 import com.ucs.projetotematico.entity.ReceitaIngrediente;
+import com.ucs.projetotematico.entity.Usuario;
 
 public class ReceitaView extends JFrame implements ActionListener {
+	private Receita receita;
+	private Usuario usuario;
 
 	private JButton bVolta;
 	private JPanel fundo, botoes, campos, camposTextArea;
 
 	private JTextField tIngredientes;
-	private Receita receita;
 	private JTextArea jTAModoPreparo;
 	private JTextArea jTAIgredientes;
 
@@ -84,13 +85,10 @@ public class ReceitaView extends JFrame implements ActionListener {
 		return ingredientes;
 	}
 
-	public ReceitaView(List<Receita> lista, Integer lineSelected) {
+	public ReceitaView(List<Receita> lista, Integer lineSelected, Usuario usuario) {
 
 		this.receita = lista.get(lineSelected);
-
-		final ReceitaDAO receitaDAO = new ReceitaDAO();
-		receita = receitaDAO.findById(this.receita.getId());
-		receitaDAO.closeConnection();
+		this.usuario = usuario;
 
 		this.init();
 
@@ -105,7 +103,7 @@ public class ReceitaView extends JFrame implements ActionListener {
 
 	private void acaoVoltar() {
 
-		new NavegaView().setVisible(true);
+		new NavegaView(usuario).setVisible(true);
 		this.dispose();
 	}
 

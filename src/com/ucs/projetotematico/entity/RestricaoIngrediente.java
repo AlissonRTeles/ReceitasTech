@@ -1,7 +1,7 @@
 package com.ucs.projetotematico.entity;
 
-public class RestricaoIngrediente extends ModelAbstract{
-	private static String tableName = "restricaoingrediente";
+public class RestricaoIngrediente extends ModelAbstract {
+	private String tableName = "restricaoingrediente";
 	private Integer idIngrediente;
 	private Integer idRestricao;
 
@@ -29,6 +29,6 @@ public class RestricaoIngrediente extends ModelAbstract{
 	@Override
 	public void setTableName(String tableName) {
 		this.tableName = tableName;
-		
+
 	}
 }

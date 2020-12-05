@@ -5,8 +5,6 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.ItemEvent;
-import java.awt.event.ItemListener;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -71,7 +69,6 @@ public class CadastroView extends JFrame implements ActionListener {
 		this.setLocationRelativeTo(null);
 
 		this.setVisible(true);
-		
 
 	}
 
@@ -93,7 +90,7 @@ public class CadastroView extends JFrame implements ActionListener {
 		tSenha.setText("");
 		tConfirma.setText("");
 		checRestricao.setSelected(false);
-		
+
 	}
 
 	private void acaoVoltar() {
@@ -109,7 +106,7 @@ public class CadastroView extends JFrame implements ActionListener {
 		this.usuario.setNome(tUsuario.getText());
 		this.usuario.setSenha(tSenha.getText());
 
-		if(checRestricao.isSelected()) {
+		if (checRestricao.isSelected()) {
 			this.usuario.setRestricao(restricao);
 		}
 
@@ -118,10 +115,12 @@ public class CadastroView extends JFrame implements ActionListener {
 
 			dao.saveOrUpdate(usuario);
 
+			usuario = dao.find(usuario);
+
 			JOptionPane.showMessageDialog(this, "usuário cadastrado com sucesso!");
 			dao.closeConnection();
 
-			new NavegaView().setVisible(true);
+			new NavegaView(usuario).setVisible(true);
 			this.dispose();
 
 		} else {

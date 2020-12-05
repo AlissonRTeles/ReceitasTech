@@ -7,12 +7,15 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.ucs.projetotematico.entity.ReceitaIngrediente;
-import com.ucs.projetotematico.entity.RestricaoIngrediente;
 import com.ucs.projetotematico.entity.RestricaoIngrediente;
 
-public class RestricaoIngredienteDAO extends ModelDao<RestricaoIngrediente>{
-	
+public class RestricaoIngredienteDAO extends ModelDao<RestricaoIngrediente> {
+
+	public RestricaoIngredienteDAO() {
+		super.setConn(super.openConnection());
+		super.setModel(new RestricaoIngrediente());
+	}
+
 	@Override
 	public List<RestricaoIngrediente> findAll() {
 		final List<RestricaoIngrediente> restricaoIngredientes = new ArrayList<RestricaoIngrediente>();
@@ -63,13 +66,13 @@ public class RestricaoIngredienteDAO extends ModelDao<RestricaoIngrediente>{
 			map.put("id", model.getId());
 		}
 		if (model.getIdIngrediente() != null) {
-			map.put("id_ingrediente",model.getIdIngrediente());
+			map.put("id_ingrediente", model.getIdIngrediente());
 		}
-		
+
 		if (model.getIdRestricao() != null) {
-			map.put("id_restricao",model.getIdRestricao());
+			map.put("id_restricao", model.getIdRestricao());
 		}
-		
+
 		super.findByInt(map, rs -> {
 			final RestricaoIngrediente receita = convertResultSet(rs);
 			receitas.add(receita);
@@ -79,8 +82,6 @@ public class RestricaoIngredienteDAO extends ModelDao<RestricaoIngrediente>{
 
 	}
 
-	
-	
 	@Override
 	public RestricaoIngrediente convertResultSet(ResultSet resultSet) {
 		final RestricaoIngrediente model = new RestricaoIngrediente();
