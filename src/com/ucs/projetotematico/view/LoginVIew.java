@@ -98,7 +98,6 @@ public class LoginVIew extends JFrame implements ActionListener {
 		if (find.getId() == null) {
 			JOptionPane.showMessageDialog(this, "usuário não cadastrado!");
 		} else {
-			getUsuarioDAO().closeConnection();
 
 			new NavegaView(find).setVisible(true);
 			this.dispose();

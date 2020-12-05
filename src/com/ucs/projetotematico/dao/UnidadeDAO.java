@@ -13,15 +13,9 @@ import com.ucs.projetotematico.entity.Unidade;
 public class UnidadeDAO extends ModelDao<Unidade> {
 	
 	UnidadeDAO() {
-		super.setConn(super.openConnection());
 		super.setModel(new Unidade());
 	}
 	
-	UnidadeDAO(Connection conn){
-		super.setConn(conn);
-		super.setModel(new Unidade());
-	}
-
 
 	@Override
 	public List<Unidade> findAll() {

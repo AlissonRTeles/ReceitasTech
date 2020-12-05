@@ -87,6 +87,7 @@ public class NavegaView extends JFrame implements ActionListener {
 		final String[] lista = tIngredientes.getText().split(",");
 		final List<Ingrediente> listaIgredientes = new ArrayList<Ingrediente>();
 		final List<ReceitaIngrediente> listaRI = new ArrayList<ReceitaIngrediente>();
+		final ReceitaDAO dao = new ReceitaDAO();
 
 		for (final String ingredienteString : lista) {
 			final Ingrediente filter = new Ingrediente();
@@ -94,21 +95,17 @@ public class NavegaView extends JFrame implements ActionListener {
 			listaIgredientes.addAll(getIngredienteDAO().findLike(filter));
 		}
 
-		listaIgredientes.forEach(ingrediente -> {
+		for(final Ingrediente ingrediente:listaIgredientes) {
 			final ReceitaIngrediente filter = new ReceitaIngrediente();
 			filter.setIngrediente(ingrediente);
 			final List<ReceitaIngrediente> filteredItems = getReceitaIngredienteDAO().findLike(filter);
 
-			filteredItems.forEach(fi -> {
-				final ReceitaDAO dao = new ReceitaDAO(ingredienteDAO.getConn());
+			for(ReceitaIngrediente fi:filteredItems) {
 				fi.setReceita(dao.findById(fi.getIdReceita()));
-			});
+			}
 
 			listaRI.addAll(filteredItems);
-		});
-
-		ingredienteDAO.closeConnection();
-		receitaIngredienteDAO.closeConnection();
+		}
 
 		new PesquisaView(listaRI, usuario);
 		this.dispose();

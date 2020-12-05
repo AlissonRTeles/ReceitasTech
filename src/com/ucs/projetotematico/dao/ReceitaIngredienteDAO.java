@@ -15,17 +15,9 @@ public class ReceitaIngredienteDAO extends ModelDao<ReceitaIngrediente> {
 	private IngredienteDAO ingredienteDAO;
 
 	public ReceitaIngredienteDAO() {
-		super.setConn(super.openConnection());
 		super.setModel(new ReceitaIngrediente());
-		this.unidadeDAO = new UnidadeDAO(super.getConn());
-		this.ingredienteDAO = new IngredienteDAO(super.getConn());
-	}
-
-	ReceitaIngredienteDAO(Connection conn) {
-		super.setConn(conn);
-		this.unidadeDAO = new UnidadeDAO(super.getConn());
-		this.ingredienteDAO = new IngredienteDAO(super.getConn());
-		super.setModel(new ReceitaIngrediente());
+		this.unidadeDAO = new UnidadeDAO();
+		this.ingredienteDAO = new IngredienteDAO();
 	}
 
 	@Override

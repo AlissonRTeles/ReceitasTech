@@ -108,28 +108,25 @@ public class PesquisaView extends JFrame implements ActionListener {
 		final List<RestricaoIngrediente> findLike = restricaoIngredienteDAO.findLike(filter);
 
 		final List<Integer> idReceitas = lista.stream().map(p -> p.getReceita().getId()).distinct().collect(Collectors.toList());
-		final List<Receita> collect = new ArrayList<Receita>();
+		List<Receita> collect = new ArrayList<Receita>();
 
 		final ReceitaDAO receitaDAO = new ReceitaDAO();
 
-		// for (final Integer i : idReceitas) {
-		// collect.add(receitaDAO.findById(i));
-		// }
+		for (final Integer i : idReceitas) {
+			collect.add(receitaDAO.findById(i));
+		}
 
-		receitaDAO.closeConnection();
 
-		// collect = collect.stream().filter((f) -> {
-		//
-		// if (f.getReceitaIngredientes().stream().anyMatch(a ->
-		// findLike.stream().anyMatch(aM ->
-		// aM.getIdIngrediente().equals(a.getIngrediente().getId())))) {
-		// return false;
-		// }
-		//
-		// return true;
-		// }).collect(Collectors.toList());
+		collect = collect.stream().filter((f) -> {
 
-		restricaoIngredienteDAO.closeConnection();
+			if (f.getReceitaIngredientes().stream().anyMatch(a ->
+			findLike.stream().anyMatch(aM ->aM.getIdIngrediente().equals(a.getIngrediente().getId())))) {
+				return false;
+			}
+
+			return true;
+		}).collect(Collectors.toList());
+
 
 		return collect;
 	}

@@ -15,15 +15,8 @@ public class UsuarioDAO extends ModelDao<Usuario> {
 	private RestricaoDAO restricaoDAO;
 
 	public UsuarioDAO() {
-		super.setConn(super.openConnection());
 		super.setModel(new Usuario());
-		this.restricaoDAO = new RestricaoDAO(super.getConn());
-	}
-
-	public UsuarioDAO(Connection conn) {
-		super.setConn(conn);
-		super.setModel(new Usuario());
-		this.restricaoDAO = new RestricaoDAO(conn);
+		this.restricaoDAO = new RestricaoDAO();
 	}
 
 	@Override
@@ -88,7 +81,9 @@ public class UsuarioDAO extends ModelDao<Usuario> {
 
 		try {
 
-			final PreparedStatement prepareStatement = super.getConn().prepareStatement(sql);
+			Connection openConnection = super.openConnection();
+			
+			final PreparedStatement prepareStatement = openConnection.prepareStatement(sql);
 			prepareStatement.setString(1, model.getNome());
 			prepareStatement.setString(2, model.getSenha());
 			if (model.getRestricao() != null) {
@@ -96,6 +91,10 @@ public class UsuarioDAO extends ModelDao<Usuario> {
 			}
 
 			prepareStatement.executeUpdate();
+			
+			prepareStatement.close();
+			openConnection.close();
+			
 		} catch (final SQLException se) {
 			System.out.println("Não foi possível conectar ao Banco de Dados");
 			se.printStackTrace();
@@ -174,11 +173,4 @@ public class UsuarioDAO extends ModelDao<Usuario> {
 		this.restricaoDAO = restricaoDAO;
 	}
 
-	@Override
-	public void closeConnection() {
-		if (restricaoDAO != null) {
-			restricaoDAO.closeConnection();
-		}
-		super.closeConnection();
-	}
 }

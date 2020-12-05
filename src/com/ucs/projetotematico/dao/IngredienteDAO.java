@@ -14,12 +14,10 @@ import com.ucs.projetotematico.entity.Ingrediente;
 public class IngredienteDAO extends ModelDao<Ingrediente> {
 	
 	public IngredienteDAO() {
-		super.setConn(super.openConnection());
 		super.setModel(new Ingrediente());
 	}
 	
 	IngredienteDAO(Connection conn){
-		super.setConn(conn);
 		super.setModel(new Ingrediente());
 	}
 

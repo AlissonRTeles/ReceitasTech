@@ -16,14 +16,8 @@ public class ReceitaDAO extends ModelDao<Receita> {
 
 	public ReceitaDAO() {
 
-		super.setConn(super.openConnection());
 		super.setModel(new Receita());
-		this.receitaIngredienteDAO = new ReceitaIngredienteDAO(super.openConnection());
-	}
-
-	public ReceitaDAO(Connection conn) {
-		super.setConn(conn);
-		super.setModel(new Receita());
+		this.receitaIngredienteDAO = new ReceitaIngredienteDAO();
 	}
 
 	@Override
@@ -142,14 +136,5 @@ public class ReceitaDAO extends ModelDao<Receita> {
 		final ReceitaDAO r = new ReceitaDAO();
 
 		System.out.println(r.findById(1).toString());
-	}
-
-	@Override
-	public void closeConnection() {
-		super.closeConnection();
-
-		if (getReceitaIngredienteDAO() != null) {
-			getReceitaIngredienteDAO().closeConnection();
-		}
 	}
 }

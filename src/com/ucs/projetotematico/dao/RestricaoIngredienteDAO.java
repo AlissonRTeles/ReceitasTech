@@ -12,7 +12,6 @@ import com.ucs.projetotematico.entity.RestricaoIngrediente;
 public class RestricaoIngredienteDAO extends ModelDao<RestricaoIngrediente> {
 
 	public RestricaoIngredienteDAO() {
-		super.setConn(super.openConnection());
 		super.setModel(new RestricaoIngrediente());
 	}
 

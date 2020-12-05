@@ -13,14 +13,9 @@ import com.ucs.projetotematico.entity.Restricao;
 public class RestricaoDAO extends ModelDao<Restricao> {
 
 	RestricaoDAO() {
-		super.setConn(super.openConnection());
 		super.setModel(new Restricao());
 	}
 
-	RestricaoDAO(Connection conn) {
-		super.setConn(conn);
-		super.setModel(new Restricao());
-	}
 
 	@Override
 	public List<Restricao> findAll() {

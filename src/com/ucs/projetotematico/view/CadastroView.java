@@ -118,7 +118,7 @@ public class CadastroView extends JFrame implements ActionListener {
 			usuario = dao.find(usuario);
 
 			JOptionPane.showMessageDialog(this, "usuário cadastrado com sucesso!");
-			dao.closeConnection();
+			
 
 			new NavegaView(usuario).setVisible(true);
 			this.dispose();
