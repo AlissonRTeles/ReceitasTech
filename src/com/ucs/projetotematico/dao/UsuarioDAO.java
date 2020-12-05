@@ -14,9 +14,10 @@ import com.ucs.projetotematico.entity.Usuario;
 public class UsuarioDAO extends ModelDao<Usuario> {
 	private RestricaoDAO restricaoDAO;
 
-	public UsuarioDAO() {
+	public UsuarioDAO(Connection connection) {
+		super.setConnection(connection);
 		super.setModel(new Usuario());
-		this.restricaoDAO = new RestricaoDAO();
+		this.restricaoDAO = new RestricaoDAO(connection);
 	}
 
 	@Override
@@ -81,8 +82,8 @@ public class UsuarioDAO extends ModelDao<Usuario> {
 
 		try {
 
-			Connection openConnection = super.openConnection();
-			
+			final Connection openConnection = super.openConnection();
+
 			final PreparedStatement prepareStatement = openConnection.prepareStatement(sql);
 			prepareStatement.setString(1, model.getNome());
 			prepareStatement.setString(2, model.getSenha());
@@ -91,10 +92,10 @@ public class UsuarioDAO extends ModelDao<Usuario> {
 			}
 
 			prepareStatement.executeUpdate();
-			
+
 			prepareStatement.close();
 			openConnection.close();
-			
+
 		} catch (final SQLException se) {
 			System.out.println("Não foi possível conectar ao Banco de Dados");
 			se.printStackTrace();

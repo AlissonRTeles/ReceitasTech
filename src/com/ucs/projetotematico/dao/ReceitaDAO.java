@@ -14,10 +14,11 @@ import com.ucs.projetotematico.entity.ReceitaIngrediente;
 public class ReceitaDAO extends ModelDao<Receita> {
 	private ReceitaIngredienteDAO receitaIngredienteDAO;
 
-	public ReceitaDAO() {
-
+	public ReceitaDAO(Connection connection) {
+		super.setConnection(connection);
 		super.setModel(new Receita());
-		this.receitaIngredienteDAO = new ReceitaIngredienteDAO();
+		this.receitaIngredienteDAO = new ReceitaIngredienteDAO(connection);
+
 	}
 
 	@Override
@@ -132,9 +133,4 @@ public class ReceitaDAO extends ModelDao<Receita> {
 		this.receitaIngredienteDAO = receitaIngredienteDAO;
 	}
 
-	public static void main(String[] args) {
-		final ReceitaDAO r = new ReceitaDAO();
-
-		System.out.println(r.findById(1).toString());
-	}
 }

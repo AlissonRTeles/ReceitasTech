@@ -8,6 +8,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -30,6 +31,8 @@ import com.ucs.projetotematico.entity.RestricaoIngrediente;
 import com.ucs.projetotematico.entity.Usuario;
 
 public class PesquisaView extends JFrame implements ActionListener {
+	private Connection connection;
+
 	private final List<ReceitaIngrediente> lista;
 	private Usuario usuario;
 
@@ -70,7 +73,7 @@ public class PesquisaView extends JFrame implements ActionListener {
 				final int row = table.rowAtPoint(point);
 				if (mouseEvent.getClickCount() == 2 && table.getSelectedRow() != -1) {
 
-					final ReceitaView receitaView = new ReceitaView(carregaResultado, table.getSelectedRow(), usuario);
+					final ReceitaView receitaView = new ReceitaView(carregaResultado, table.getSelectedRow(), usuario, connection);
 				}
 			}
 		});
@@ -101,7 +104,7 @@ public class PesquisaView extends JFrame implements ActionListener {
 	}
 
 	public List<Receita> carregaResultado() {
-		final RestricaoIngredienteDAO restricaoIngredienteDAO = new RestricaoIngredienteDAO();
+		final RestricaoIngredienteDAO restricaoIngredienteDAO = new RestricaoIngredienteDAO(connection);
 		final RestricaoIngrediente filter = new RestricaoIngrediente();
 		filter.setIdRestricao(usuario.getRestricao().getId());
 
@@ -110,23 +113,20 @@ public class PesquisaView extends JFrame implements ActionListener {
 		final List<Integer> idReceitas = lista.stream().map(p -> p.getReceita().getId()).distinct().collect(Collectors.toList());
 		List<Receita> collect = new ArrayList<Receita>();
 
-		final ReceitaDAO receitaDAO = new ReceitaDAO();
+		final ReceitaDAO receitaDAO = new ReceitaDAO(connection);
 
 		for (final Integer i : idReceitas) {
 			collect.add(receitaDAO.findById(i));
 		}
 
-
 		collect = collect.stream().filter((f) -> {
 
-			if (f.getReceitaIngredientes().stream().anyMatch(a ->
-			findLike.stream().anyMatch(aM ->aM.getIdIngrediente().equals(a.getIngrediente().getId())))) {
+			if (f.getReceitaIngredientes().stream().anyMatch(a -> findLike.stream().anyMatch(aM -> aM.getIdIngrediente().equals(a.getIngrediente().getId())))) {
 				return false;
 			}
 
 			return true;
 		}).collect(Collectors.toList());
-
 
 		return collect;
 	}
@@ -136,7 +136,8 @@ public class PesquisaView extends JFrame implements ActionListener {
 		this.lista = new ArrayList<ReceitaIngrediente>();
 	}
 
-	public PesquisaView(List<ReceitaIngrediente> lista, Usuario usuario) {
+	public PesquisaView(List<ReceitaIngrediente> lista, Usuario usuario, Connection connection) {
+		this.connection = connection;
 		this.lista = lista;
 		this.usuario = usuario;
 		this.init();
@@ -151,7 +152,7 @@ public class PesquisaView extends JFrame implements ActionListener {
 
 	private void acaoVoltar() {
 
-		new NavegaView(usuario).setVisible(true);
+		new NavegaView(usuario, connection).setVisible(true);
 		this.dispose();
 	}
 

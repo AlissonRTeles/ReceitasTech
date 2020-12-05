@@ -12,10 +12,10 @@ import com.ucs.projetotematico.entity.Restricao;
 
 public class RestricaoDAO extends ModelDao<Restricao> {
 
-	RestricaoDAO() {
+	RestricaoDAO(Connection connection) {
 		super.setModel(new Restricao());
+		super.setConnection(connection);
 	}
-
 
 	@Override
 	public List<Restricao> findAll() {
@@ -96,11 +96,5 @@ public class RestricaoDAO extends ModelDao<Restricao> {
 			e.printStackTrace();
 		}
 		return model;
-	}
-
-	public static void main(String[] args) {
-		final RestricaoDAO u = new RestricaoDAO();
-
-		u.findAll().forEach(l -> System.out.println(l.toString()));
 	}
 }

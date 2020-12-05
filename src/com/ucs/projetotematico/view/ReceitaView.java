@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.util.List;
 
 import javax.swing.JButton;
@@ -20,6 +21,7 @@ import com.ucs.projetotematico.entity.ReceitaIngrediente;
 import com.ucs.projetotematico.entity.Usuario;
 
 public class ReceitaView extends JFrame implements ActionListener {
+	private Connection connection;
 	private Receita receita;
 	private Usuario usuario;
 
@@ -85,8 +87,8 @@ public class ReceitaView extends JFrame implements ActionListener {
 		return ingredientes;
 	}
 
-	public ReceitaView(List<Receita> lista, Integer lineSelected, Usuario usuario) {
-
+	public ReceitaView(List<Receita> lista, Integer lineSelected, Usuario usuario, Connection connection) {
+		this.connection = connection;
 		this.receita = lista.get(lineSelected);
 		this.usuario = usuario;
 
@@ -103,7 +105,7 @@ public class ReceitaView extends JFrame implements ActionListener {
 
 	private void acaoVoltar() {
 
-		new NavegaView(usuario).setVisible(true);
+		new NavegaView(usuario, connection).setVisible(true);
 		this.dispose();
 	}
 

@@ -11,11 +11,11 @@ import java.util.Map;
 import com.ucs.projetotematico.entity.Unidade;
 
 public class UnidadeDAO extends ModelDao<Unidade> {
-	
-	UnidadeDAO() {
+
+	UnidadeDAO(Connection connection) {
 		super.setModel(new Unidade());
+		super.setConnection(connection);
 	}
-	
 
 	@Override
 	public List<Unidade> findAll() {
@@ -97,5 +97,5 @@ public class UnidadeDAO extends ModelDao<Unidade> {
 		}
 		return model;
 	}
-	
+
 }

@@ -9,16 +9,12 @@ import java.util.List;
 import java.util.Map;
 
 import com.ucs.projetotematico.entity.Ingrediente;
-import com.ucs.projetotematico.entity.Ingrediente;
 
 public class IngredienteDAO extends ModelDao<Ingrediente> {
-	
-	public IngredienteDAO() {
+
+	public IngredienteDAO(Connection connection) {
 		super.setModel(new Ingrediente());
-	}
-	
-	IngredienteDAO(Connection conn){
-		super.setModel(new Ingrediente());
+		super.setConnection(connection);
 	}
 
 	@Override
@@ -101,5 +97,5 @@ public class IngredienteDAO extends ModelDao<Ingrediente> {
 		}
 		return model;
 	}
-	
+
 }

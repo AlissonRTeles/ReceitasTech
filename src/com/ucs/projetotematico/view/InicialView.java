@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -14,6 +15,7 @@ public class InicialView extends JFrame implements ActionListener {
 
 	private JButton bLoga, bCadastra;
 	private JPanel fundo, botoes, campos;
+	private final Connection connection;
 
 	private void init() {
 
@@ -42,26 +44,20 @@ public class InicialView extends JFrame implements ActionListener {
 
 	}
 
-	public InicialView() {
+	public InicialView(Connection connection) {
+		this.connection = connection;
 		this.init();
-	}
-
-	public static void main(String[] args) {
-
-		final InicialView pg1 = new InicialView();
-		// pg1.init();
-
 	}
 
 	private void acaoLogar() {
 
-		new LoginVIew().setVisible(true);
+		new LoginVIew(connection).setVisible(true);
 		this.dispose();
 	}
 
 	private void acaoCadastrar() {
 
-		new CadastroView().setVisible(true);
+		new CadastroView(connection).setVisible(true);
 		this.dispose();
 	}
 

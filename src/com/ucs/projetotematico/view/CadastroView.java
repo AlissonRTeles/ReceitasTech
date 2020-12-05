@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 
 import javax.swing.JButton;
 import javax.swing.JCheckBox;
@@ -19,6 +20,7 @@ import com.ucs.projetotematico.entity.Restricao;
 import com.ucs.projetotematico.entity.Usuario;
 
 public class CadastroView extends JFrame implements ActionListener {
+	Connection connection;
 
 	private JButton bCadastra, bVolta, bLimpa;
 	private JPanel fundo, botoes, campos;
@@ -72,17 +74,11 @@ public class CadastroView extends JFrame implements ActionListener {
 
 	}
 
-	public CadastroView() {
+	public CadastroView(Connection connection) {
+		this.connection = connection;
 		this.usuario = new Usuario();
 
 		this.init();
-	}
-
-	public static void main(String[] args) {
-
-		final CadastroView pg3 = new CadastroView();
-		// pg3.init();
-
 	}
 
 	private void acaoLimpar() {
@@ -95,7 +91,7 @@ public class CadastroView extends JFrame implements ActionListener {
 
 	private void acaoVoltar() {
 
-		new InicialView().setVisible(true);
+		new InicialView(connection).setVisible(true);
 		this.dispose();
 	}
 
@@ -111,16 +107,15 @@ public class CadastroView extends JFrame implements ActionListener {
 		}
 
 		if (validaSenha(usuario.getSenha().trim(), tConfirma.getText().trim())) {
-			final UsuarioDAO dao = new UsuarioDAO();
+			final UsuarioDAO dao = new UsuarioDAO(connection);
 
 			dao.saveOrUpdate(usuario);
 
 			usuario = dao.find(usuario);
 
 			JOptionPane.showMessageDialog(this, "usuário cadastrado com sucesso!");
-			
 
-			new NavegaView(usuario).setVisible(true);
+			new NavegaView(usuario, connection).setVisible(true);
 			this.dispose();
 
 		} else {

@@ -1,5 +1,6 @@
 package com.ucs.projetotematico.dao;
 
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -11,7 +12,8 @@ import com.ucs.projetotematico.entity.RestricaoIngrediente;
 
 public class RestricaoIngredienteDAO extends ModelDao<RestricaoIngrediente> {
 
-	public RestricaoIngredienteDAO() {
+	public RestricaoIngredienteDAO(Connection connection) {
+		super.setConnection(connection);
 		super.setModel(new RestricaoIngrediente());
 	}
 

@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 
 import javax.swing.JButton;
 import javax.swing.JFrame;
@@ -17,7 +18,7 @@ import com.ucs.projetotematico.dao.UsuarioDAO;
 import com.ucs.projetotematico.entity.Usuario;
 
 public class LoginVIew extends JFrame implements ActionListener {
-
+	private final Connection connection;
 	private UsuarioDAO usuarioDAO;
 
 	private JButton bEntra, bVolta, bLimpa;
@@ -26,7 +27,7 @@ public class LoginVIew extends JFrame implements ActionListener {
 	private JTextField tUsuario, tSenha;
 
 	private void init() {
-		this.usuarioDAO = new UsuarioDAO();
+		this.usuarioDAO = new UsuarioDAO(connection);
 
 		this.setTitle("Login");
 		this.setSize(500, 200);
@@ -65,13 +66,9 @@ public class LoginVIew extends JFrame implements ActionListener {
 
 	}
 
-	public LoginVIew() {
+	public LoginVIew(Connection connection) {
+		this.connection = connection;
 		this.init();
-	}
-
-	public static void main(String[] args) {
-		final LoginVIew pg2 = new LoginVIew();
-		// pg2.init();
 	}
 
 	private void acaoLimpar() {
@@ -81,7 +78,7 @@ public class LoginVIew extends JFrame implements ActionListener {
 
 	private void acaoVoltar() {
 
-		new InicialView().setVisible(true);
+		new InicialView(connection).setVisible(true);
 		this.dispose();
 	}
 
@@ -99,7 +96,7 @@ public class LoginVIew extends JFrame implements ActionListener {
 			JOptionPane.showMessageDialog(this, "usuário não cadastrado!");
 		} else {
 
-			new NavegaView(find).setVisible(true);
+			new NavegaView(find, connection).setVisible(true);
 			this.dispose();
 		}
 

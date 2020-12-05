@@ -5,6 +5,7 @@ import java.awt.FlowLayout;
 import java.awt.GridLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -22,6 +23,7 @@ import com.ucs.projetotematico.entity.ReceitaIngrediente;
 import com.ucs.projetotematico.entity.Usuario;
 
 public class NavegaView extends JFrame implements ActionListener {
+	private final Connection connection;
 
 	private IngredienteDAO ingredienteDAO;
 	private ReceitaIngredienteDAO receitaIngredienteDAO;
@@ -34,8 +36,8 @@ public class NavegaView extends JFrame implements ActionListener {
 
 	private void init() {
 
-		this.ingredienteDAO = new IngredienteDAO();
-		this.receitaIngredienteDAO = new ReceitaIngredienteDAO();
+		this.ingredienteDAO = new IngredienteDAO(connection);
+		this.receitaIngredienteDAO = new ReceitaIngredienteDAO(connection);
 		this.setTitle("Pesquisa");
 		this.setSize(500, 200);
 
@@ -67,16 +69,10 @@ public class NavegaView extends JFrame implements ActionListener {
 
 	}
 
-	public NavegaView(Usuario usuario) {
+	public NavegaView(Usuario usuario, Connection connection) {
+		this.connection = connection;
 		this.usuario = usuario;
 		this.init();
-	}
-
-	public static void main(String[] args) {
-
-		final NavegaView pg4 = new NavegaView(new Usuario());
-		// pg4.init();
-
 	}
 
 	private void acaoLimpar() {
@@ -87,7 +83,7 @@ public class NavegaView extends JFrame implements ActionListener {
 		final String[] lista = tIngredientes.getText().split(",");
 		final List<Ingrediente> listaIgredientes = new ArrayList<Ingrediente>();
 		final List<ReceitaIngrediente> listaRI = new ArrayList<ReceitaIngrediente>();
-		final ReceitaDAO dao = new ReceitaDAO();
+		final ReceitaDAO dao = new ReceitaDAO(connection);
 
 		for (final String ingredienteString : lista) {
 			final Ingrediente filter = new Ingrediente();
@@ -95,19 +91,19 @@ public class NavegaView extends JFrame implements ActionListener {
 			listaIgredientes.addAll(getIngredienteDAO().findLike(filter));
 		}
 
-		for(final Ingrediente ingrediente:listaIgredientes) {
+		for (final Ingrediente ingrediente : listaIgredientes) {
 			final ReceitaIngrediente filter = new ReceitaIngrediente();
 			filter.setIngrediente(ingrediente);
 			final List<ReceitaIngrediente> filteredItems = getReceitaIngredienteDAO().findLike(filter);
 
-			for(ReceitaIngrediente fi:filteredItems) {
+			for (final ReceitaIngrediente fi : filteredItems) {
 				fi.setReceita(dao.findById(fi.getIdReceita()));
 			}
 
 			listaRI.addAll(filteredItems);
 		}
 
-		new PesquisaView(listaRI, usuario);
+		new PesquisaView(listaRI, usuario, connection);
 		this.dispose();
 	}
 

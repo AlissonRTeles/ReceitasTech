@@ -14,10 +14,11 @@ public class ReceitaIngredienteDAO extends ModelDao<ReceitaIngrediente> {
 	private UnidadeDAO unidadeDAO;
 	private IngredienteDAO ingredienteDAO;
 
-	public ReceitaIngredienteDAO() {
+	public ReceitaIngredienteDAO(Connection connection) {
+		super.setConnection(connection);
 		super.setModel(new ReceitaIngrediente());
-		this.unidadeDAO = new UnidadeDAO();
-		this.ingredienteDAO = new IngredienteDAO();
+		this.unidadeDAO = new UnidadeDAO(connection);
+		this.ingredienteDAO = new IngredienteDAO(connection);
 	}
 
 	@Override

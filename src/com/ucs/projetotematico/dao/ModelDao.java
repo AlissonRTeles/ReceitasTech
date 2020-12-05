@@ -18,10 +18,11 @@ import java.util.stream.Collectors;
 import com.ucs.projetotematico.entity.ModelAbstract;
 
 public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInterface<M> {
-	
-	private M model;
 
-	public Connection openConnection() {
+	private M model;
+	private Connection connection;
+
+	public static Connection openConnection() {
 
 		Connection connection = null;
 
@@ -48,19 +49,17 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 	public void findAll(Consumer<ResultSet> action) {
 
 		try {
-			Connection openConnection = openConnection();
-			
-			Statement st = openConnection.createStatement();
-			ResultSet rs = st.executeQuery("select * from " + getModel().getTableName());
+
+			final Statement st = connection.createStatement();
+			final ResultSet rs = st.executeQuery("select * from " + getModel().getTableName());
 
 			while (rs.next()) {
 				action.accept(rs);
 			}
-			
+
 			rs.close();
 			st.close();
-			openConnection.close();
-			
+
 		} catch (final SQLException se) {
 			System.out.println("Não foi possível conectar ao Banco de Dados");
 			se.printStackTrace();
@@ -70,25 +69,22 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 
 	public void findById(Consumer<ResultSet> action, Integer id) {
 		try {
-			
-			Connection openConnection = openConnection();
-			
+
 			final String sql = "select * from " + getModel().getTableName() + " where id=?";
-			final PreparedStatement prepareStatement = openConnection.prepareStatement(sql);
-			
+			final PreparedStatement prepareStatement = connection.prepareStatement(sql);
+
 			prepareStatement.setInt(1, id);
 
-			ResultSet rs = prepareStatement.executeQuery();
+			final ResultSet rs = prepareStatement.executeQuery();
 
 			while (rs.next()) {
 
 				action.accept(rs);
 			}
-			
+
 			rs.close();
 			prepareStatement.close();
-			openConnection.close();
-			
+
 		} catch (final SQLException se) {
 			System.out.println("Não foi possível conectar ao Banco de Dados");
 			se.printStackTrace();
@@ -98,16 +94,14 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 	@Override
 	public boolean remove(Integer id) {
 		try {
-			Connection openConnection = openConnection();
-			
+
 			final String sql = "delete from " + getModel().getTableName() + " where id=?";
-			final PreparedStatement prepareStatement = openConnection.prepareStatement(sql);
+			final PreparedStatement prepareStatement = connection.prepareStatement(sql);
 			prepareStatement.setInt(1, id);
-			boolean execute = prepareStatement.execute();
-			
+			final boolean execute = prepareStatement.execute();
+
 			prepareStatement.close();
-			openConnection.close();
-			
+
 			return execute;
 		} catch (final SQLException se) {
 			System.out.println("Não foi possível conectar ao Banco de Dados");
@@ -142,19 +136,19 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 		sql = sql.concat(map.values().stream().collect(Collectors.joining("','", "'", "'")));
 		sql = sql.concat(" ) ");
 
-		/*try {
-
-			final PreparedStatement prepareStatement = conn.prepareStatement(sql);
-			prepareStatement.executeUpdate();
-		} catch (final SQLException se) {
-			System.out.println("Não foi possível conectar ao Banco de Dados");
-			se.printStackTrace();
-		}*/
+		/*
+		 * try {
+		 *
+		 * final PreparedStatement prepareStatement =
+		 * conn.prepareStatement(sql); prepareStatement.executeUpdate(); } catch
+		 * (final SQLException se) {
+		 * System.out.println("Não foi possível conectar ao Banco de Dados");
+		 * se.printStackTrace(); }
+		 */
 	}
 
 	public void findLike(Map<String, String> map, Consumer<ResultSet> action) {
-		Connection openConnection = openConnection();
-		
+
 		String sql = "select * from " + getModel().getTableName();
 
 		map.remove("id");
@@ -172,17 +166,16 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 
 		try {
 
-			final PreparedStatement prepareStatement = openConnection.prepareStatement(sql);
-			ResultSet rs = prepareStatement.executeQuery();
+			final PreparedStatement prepareStatement = connection.prepareStatement(sql);
+			final ResultSet rs = prepareStatement.executeQuery();
 
 			while (rs.next()) {
 				action.accept(rs);
 			}
-			
+
 			rs.close();
 			prepareStatement.close();
-			openConnection.close();
-			
+
 		} catch (final SQLException se) {
 			System.out.println("Não foi possível conectar ao Banco de Dados");
 			se.printStackTrace();
@@ -190,8 +183,7 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 	}
 
 	public void findByInt(Map<String, Integer> map, Consumer<ResultSet> action) {
-		Connection openConnection = openConnection();
-		
+
 		String sql = "select * from " + getModel().getTableName();
 		sql = sql.concat(" where ");
 		final Set<String> keySet = map.keySet();
@@ -206,17 +198,16 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 
 		try {
 
-			final PreparedStatement prepareStatement = openConnection.prepareStatement(sql);
-			ResultSet rs = prepareStatement.executeQuery();
+			final PreparedStatement prepareStatement = connection.prepareStatement(sql);
+			final ResultSet rs = prepareStatement.executeQuery();
 
 			while (rs.next()) {
 				action.accept(rs);
 			}
-			
+
 			rs.close();
 			prepareStatement.close();
-			openConnection.close();
-			
+
 		} catch (final SQLException se) {
 			System.out.println("Não foi possível conectar ao Banco de Dados");
 			se.printStackTrace();
@@ -224,8 +215,7 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 	}
 
 	public void findByString(Map<String, String> map, Consumer<ResultSet> action) {
-		Connection openConnection = openConnection();
-		
+
 		String sql = "select * from " + getModel().getTableName();
 		sql = sql.concat(" where ");
 
@@ -241,17 +231,16 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 
 		try {
 
-			final PreparedStatement prepareStatement = openConnection.prepareStatement(sql);
-			ResultSet rs = prepareStatement.executeQuery();
+			final PreparedStatement prepareStatement = connection.prepareStatement(sql);
+			final ResultSet rs = prepareStatement.executeQuery();
 
 			while (rs.next()) {
 				action.accept(rs);
 			}
-			
+
 			rs.close();
 			prepareStatement.close();
-			openConnection.close();
-			
+
 		} catch (final SQLException se) {
 			System.out.println("Não foi possível conectar ao Banco de Dados");
 			se.printStackTrace();
@@ -262,7 +251,7 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 
 	}
 
-	public Properties loadFile() {
+	public static Properties loadFile() {
 		final Properties prop = new Properties();
 		try (InputStream input = new FileInputStream("connection.properties")) {
 			prop.load(input);
@@ -272,13 +261,20 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 		return prop;
 	}
 
-	
 	public M getModel() {
 		return model;
 	}
 
 	public void setModel(M model) {
 		this.model = model;
+	}
+
+	public Connection getConnection() {
+		return connection;
+	}
+
+	public void setConnection(Connection connection) {
+		this.connection = connection;
 	}
 
 }
