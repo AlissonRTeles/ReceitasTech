@@ -22,43 +22,19 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 	private M model;
 	private Connection connection;
 
-	public static Connection openConnection() {
-
-		Connection connection = null;
-
-		final Properties prop = loadFile();
-
-		final String driver = prop.getProperty("driver");
-		final String url = prop.getProperty("url");
-		final String user = prop.getProperty("user");
-		final String pwd = prop.getProperty("pwd");
-
-		try {
-
-			Class.forName(driver);
-			connection = DriverManager.getConnection(url, user, pwd);
-		} catch (final ClassNotFoundException cnfe) {
-			System.out.println("Driver JDBC não encontrado");
-		} catch (final SQLException se) {
-			System.out.println("Falha na conexão " + se.getMessage());
-		}
-
-		return connection;
-	}
 
 	public void findAll(Consumer<ResultSet> action) {
 
 		try {
-
-			final Statement st = connection.createStatement();
-			final ResultSet rs = st.executeQuery("select * from " + getModel().getTableName());
+			final PreparedStatement prepareStatement = connection.prepareStatement("select * from " + getModel().getTableName());
+			final ResultSet rs = prepareStatement.executeQuery();
 
 			while (rs.next()) {
 				action.accept(rs);
 			}
 
 			rs.close();
-			st.close();
+			
 
 		} catch (final SQLException se) {
 			System.out.println("Não foi possível conectar ao Banco de Dados");
@@ -249,16 +225,6 @@ public abstract class ModelDao<M extends ModelAbstract> implements ModelDaoInter
 
 	private void update(Map<String, String> map, Integer id) {
 
-	}
-
-	public static Properties loadFile() {
-		final Properties prop = new Properties();
-		try (InputStream input = new FileInputStream("connection.properties")) {
-			prop.load(input);
-		} catch (final IOException ex) {
-			ex.printStackTrace();
-		}
-		return prop;
 	}
 
 	public M getModel() {

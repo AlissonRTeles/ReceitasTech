@@ -51,7 +51,7 @@ public class CadastroView extends JFrame implements ActionListener {
 		fundo = new JPanel(new BorderLayout());
 		botoes = new JPanel(new FlowLayout());
 
-		campos.add(new JLabel("Usu�rio:"));
+		campos.add(new JLabel("Usuário:"));
 		campos.add(tUsuario);
 		campos.add(new JLabel("Senha:"));
 		campos.add(tSenha);

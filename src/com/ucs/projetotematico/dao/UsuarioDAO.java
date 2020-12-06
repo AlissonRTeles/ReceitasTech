@@ -82,7 +82,7 @@ public class UsuarioDAO extends ModelDao<Usuario> {
 
 		try {
 
-			final Connection openConnection = super.openConnection();
+			final Connection openConnection = super.getConnection();
 
 			final PreparedStatement prepareStatement = openConnection.prepareStatement(sql);
 			prepareStatement.setString(1, model.getNome());
