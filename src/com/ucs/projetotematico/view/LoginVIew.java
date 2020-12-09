@@ -15,6 +15,7 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 
 import com.ucs.projetotematico.dao.UsuarioDAO;
+import com.ucs.projetotematico.entity.Restricao;
 import com.ucs.projetotematico.entity.Usuario;
 
 public class LoginVIew extends JFrame implements ActionListener {
@@ -88,8 +89,11 @@ public class LoginVIew extends JFrame implements ActionListener {
 		model.setSenha(tSenha.getText());
 
 		final Usuario find = getUsuarioDAO().find(model);
-		if (find.getRestricao().getId() == null) {
-			find.getRestricao().setId(-999);
+		if (find.getRestricao() == null || find.getRestricao().getId() == null) {
+			
+			Restricao restricao = new Restricao();
+			restricao.setId(-999);
+			find.setRestricao(restricao);;
 		}
 
 		if (find.getId() == null) {
